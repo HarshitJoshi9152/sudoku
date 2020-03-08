@@ -1,0 +1,92 @@
+HARSHIT JOSHI   18/2/2020 5:15 PM
+
+HARSHIT JOSHI   3/9/2020 00:07
+
+came to know about script:type = "module" \
+while trying to use `import util from "C:/backup/Documents/html/javaScript/projects/js_util/utility"`
+
+
+i have been able to code the sudoku box and i also realised that the reason for 
+one of the lines drawn in the canvas appearing differently is most of times the possiblity that
+the last/first line may not have full space to get rendered (width wise).
+
+
+QUERY
+we cannot use const in simple loops but we can in 
+
+for (const i in range(1,201)) {
+    console.log(i)
+}
+
+....why ?
+
+OBS
+
+came to know why i was getting 
+
+VM2295:1 Uncaught TypeError: Cannot set property '1' of undefined
+    at <anonymous>:1:9
+while trying to assign sudoku values from string to array.
+    sudoku[Math.floor(i/9)][i%9] = nums[i];
+
+
+DUMB ERROR 1:42
+
+i was inspecting sudokus[0][0] repetedly in the console without realising it.
+i thought that the value assignment loop was only assigning the first line of sudoku_nums_string
+because of this and i spent quite some time working on it.
+
+both ways work
+    for (let i = 0; i < 9; i++) 
+    {
+        for (let j = 0; j < 9; j++)
+        {
+            sudoku[i][j] = nums[acc];
+            acc++
+        }
+    }
+
+    for (let i = 0; i < 81; i++){
+        sudoku[Math.floor(i/9)][i%9] = nums[i];
+    }
+
+1:47 removed the range function coz NO NEED OF THAT
+
+
+idea of generating sudoku vs transfering pre made sudokus from the kaggle database
+
+QUERY
+    renderValueInPlace = function(val, { x, y }) 
+    {
+        let x = this.x + this.unit * x;
+        let y = this.y + this.unit * y;
+        ctx.strokeText(val, x, y)
+    }
+
+    error :
+         x has already been declared
+
+should unit be decided mathematically or should the used be able to specify it ?
+    mathematically i guess; 
+
+    constructor(x, y, unit, ctx, sudokuMap, fs)
+    {
+        this.sudokuMap = sudokuMap;
+        this.unit = unit;
+        this.x = x, this.y = y;
+        this.ctx = ctx;
+        this.digitPadding = unit/2;
+        this.fontSize = fs
+    }
+
+
+this.unit = (e-s)/9; vs this.unit = e-s/9;
+
+font size should also be decided mathematically
+
+i want to learn about vs code tricks tips cutomisation and other cool stuff
+
+selecting a font for programming
+    bisquit font
+    DejaVu Sans Mono
+    ubuntu mono
