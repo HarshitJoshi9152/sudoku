@@ -90,3 +90,17 @@ selecting a font for programming
     bisquit font
     DejaVu Sans Mono
     ubuntu mono
+
+14:13
+theme currently being used 
+gruvbox Material dark
+some version of noctis
+shades of purple
+
+current font family :: Consolas, 'Courier New', monospace
+
+
+HarshitJoshi9152 3/20/2020 5:13
+
+i wasted my time trying to loop over matrixRangeValues([0,0],[5,2])
+i still have to experiment with the matrixRangeValues() function

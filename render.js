@@ -1,6 +1,9 @@
 // TODO ::
 /*  implement the FONTSIZE functionality
     figure out a better way to add padding to the boxes
+
+    i think we should implement a better way to specify the location and size of the sudoku
+    
 */
 class Render
 {
@@ -22,7 +25,7 @@ class Render
 
         for (let i = 0; i < 10; i++)
         {
-            console.log("weird behaviour", y, this.ctx.lineWidth, this.ctx.lineCap)
+            // console.log("weird behaviour", y, this.ctx.lineWidth, this.ctx.lineCap)
             // paths
             this.ctx.beginPath();
             this.ctx.moveTo(x,y);
@@ -36,7 +39,7 @@ class Render
         y = this.y;
         for (let i = 0; i < 10; i++)
         {
-            console.log("weird behaviour", y, this.ctx.lineWidth, this.ctx.lineCap)
+            // console.log("weird behaviour", y, this.ctx.lineWidth, this.ctx.lineCap)
             // paths
             this.ctx.beginPath();
             this.ctx.moveTo(x,y);
@@ -66,6 +69,11 @@ class Render
 
     renderValueInPlace = function(val, { x:x, y:y }, edit=false) 
     {
+        // todo fix the overclearing error execute: render.renderValueInPlace("$",{x:5,y:0}, true)
+
+        this.ctx.font = "15px sans-serif";
+        this.ctx.fillText(`${x},${y}`, this.x + this.unit * x, this.y + this.unit * y);
+
         val = (val == 0) ? "x" : val;
 
         x = this.x + this.unit * x;

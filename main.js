@@ -37,4 +37,49 @@ let height = canvas.height;
     render.renderBox();
     render.renderValues();
 
+    solver = new Solver();
+    solver.SetSudoku(sudoku);
+    solver.analyse();
+    // console.table(solver.missingCoordinates);
+
 })();
+
+
+function matrixRangeValues(s, e, matrix)
+{
+    // if(s[0] !== s[1] || e[0] !== e[1])
+    //     throw new Error("values not supported by the function");
+    let ysize = 0;
+    let coors = [];
+    let rowsize = e[0] - s[0] + 1; // coz indexing starts at 0
+    let start = s[0]*s[1];
+    let limit = (e[0]+1-s[0])*(e[1]+1-s[1]);
+    // console.log(limit);
+    for (let i = start; i < limit; i++)
+    {
+        let coor = [i % rowsize, ysize] // x-cor, y-cor
+        if(i !== s[0]*s[1] && i % rowsize == rowsize-1)
+        {
+            // if this is not the first loop interval and we have outgrown the row
+            ysize += 1;
+        }
+        coors.push(coor);
+    }
+    return coors;
+}
+
+// checking if the matrixRangeValues() function works if s[0] !== s[1] || e[0] !== e[1] by shading output cells yellow
+
+let yellowgrp = matrixRangeValues([0,0],[5,2])
+
+
+let acc = 0;
+for (let i of yellowgrp){
+    acc++;
+    // console.log(i[1], i[0],"hello");
+    render.renderValueInPlace("$",{
+        x:i[0], // 0,1 because the renderValueInPlace takes arg like the coordinate sys not like array indexes and
+        y:i[1]  // matrixRangeValues returns it according to the coordinate sys
+    },true);
+}
+console.log(acc);
