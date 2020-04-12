@@ -103,4 +103,69 @@ current font family :: Consolas, 'Courier New', monospace
 HarshitJoshi9152 3/20/2020 5:13
 
 i wasted my time trying to loop over matrixRangeValues([0,0],[5,2])
-i still have to experiment with the matrixRangeValues() function
+i still have to experiment with the matrixRangeValues() function 
+
+4/12/2020 1:32 PM
+
+all positions on the sudoku must be refered to by the coordinate system ie (x-pos, y-pos)
+and NOT by the 2D array indexing system in which the 1st value would represent the y-pos and the
+next the x-pos .That is why when getting the value from a cube we would use [2ndArg][1stArg] when the 
+function accepts position in arguments as (1st: x-pos, 2nd: y-pos);
+
+wrote a new function for getting matrix range indexes
+
+newMatrixRangeMethod([0,6],[2,8]) does nt work because of division by zero in the
+declaration of xval
+
+WOW 1 simple correction fixed 3 errors // division by zero in declaration of yval var.
+
+// testing code
+const experimentalValues = [
+    [[6,0],[8,2],"$"], // buggy
+    [[7,2],[8,8],"!"], // buggy
+    [[2,7],[6,8],"&"], // buggy lol
+];
+
+for (let i of experimentalValues) {
+    console.table("testing for :", ...i);
+    test_matrix_range(i[0], i[1], newMatrixRangeMethod, i[2] || "*");
+}
+
+but what was the difference between both the functions ?
+
+refactored the main.js a little bit and moved the renamed newMatrixRangeMethod to getRangeCoors
+and moved it to a new file
+
+11:32 pm
+
+so i just did <code>solver.getValue(solver.missingCoordinates[1]) == 0</code> and i got 
+true then i did <code>solver.getValue(solver.missingCoordinates[1]) !== 0</code> and i still
+got true. wtf javascript.
+
+for full context
+<code> // Solver Class
+    getValue = (pos) => {
+        return this.sudoku[pos[1]][pos[0]];
+        // because in 2d array first y-pos is given then x-pos is given
+    }
+
+    // testingPurposes
+    verifyMissingValues = () => {
+        const missingValueObj = {};
+        for (let i of this.missingCoordinates){
+            if(this.getValue([i[0], i[1]]) !== 0){
+                missingValueObj[i.toString()] = this.getValue([i[0], i[1]]);
+            }
+        }
+        return missingValueObj;
+    }
+</code>
+
+in javascript why are "0" == 0 and "0" !== 0 both true ?
+oh i know now ... == allows coersion but === does not allow coersion.
+
+even with the uncompatible coordinate system in different functions the
+discrepancy were just 12 locations <code>Object.keys(solver.verifyMissingValues()).length</code>
+wow !!
+
+
