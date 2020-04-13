@@ -168,4 +168,49 @@ even with the uncompatible coordinate system in different functions the
 discrepancy were just 12 locations <code>Object.keys(solver.verifyMissingValues()).length</code>
 wow !!
 
+4/13/2020 3:55
 
+there is no way of returning from a forEach loop
+
+
+11:20
+    // testing javascript snippets
+    const admin = true;
+
+    // generated with s-? snippet;
+    admin ? sayHello() : Login();
+    
+    // generated with def snippet
+    function sayHello(name) {
+        return name;
+    }
+    function Login(cred) {
+        // generated with fi snippet
+        if (!cred)
+            return "501 Not Authenticated";
+    }
+
+4/14/2020 12:00 
+
+i came to know about the conspiracy of my lost git commits
+and in VS CODE 
+alt + LeftArrow || RightArrow  takes us to the starting and ending braces of the current lexical context;
+                               // well i guess NOT
+alt + UpArrow || DownArrow  moves the current line to the new location;
+
+Currently coding the solver.solve method
+    we have (partially to be honest) achieved the capability to map solution values for each 
+    coordinate on the sudoku
+    
+    we should write that value to the sudoku if there is only 1 elm in any element's solutionBuffer and we
+    should update other coordinate's solutionBuffer
+
+    error while on solver.missingCoordinates[12]:
+        solver.js:137 Uncaught TypeError: Cannot read property 'includes' of undefined
+        at solver.js:137
+        info:
+            solver.missingCoordinates[12] === [2,2]
+            PROBLEM IN IN COL
+            ###SOLVED
+    
+    LOOP UNTIL THERE IS NO item left in solver.missingCoordinates

@@ -1,4 +1,4 @@
-// todo 
+// todo Test findGrid method and code the solve method
 // edit renderer.render to show coordinates to easily DONE
 // generate the indexes of box values programmatically. 
 
@@ -31,8 +31,19 @@ class Solver
             []
         ];
 
+        this.boxesCoordinates = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ];
         this.missingCoordinates = [];
-
+        this.solutionsBuffer = {};
     }
 
     analyse = function()
@@ -72,8 +83,10 @@ class Solver
         for (let i of this.genBoxCoors()){
             let coors = getRangeCoors(i[0],i[1]);
             /* if you want to get coordinates only use : this.boxes[acc].push(this.sudoku[coors[1]][coors[0]]);*/
+
             for (let j of coors) {
                 this.boxes[acc].push(this.sudoku[j[1]][j[0]]);
+                this.boxesCoordinates[acc].push(j.toString());
             }
             // because in arrays we first have to mention y-val then the x-val;
             acc++;
@@ -101,15 +114,56 @@ class Solver
     }
 
     solve = () => {
-        const vals = [1,2,3,4,5,6,7,8,9];
-
-        // console.log(this.rows);
-        // console.log(this.cols);
-        // console.log(this.boxes);
-
-        for (let i in this.missingCoordinates){
-            console.log(this.missingCoordinates[i]);
+        const vals = ["1","2","3","4","5","6","7","8","9"];
+        for (let i of this.missingCoordinates){            
+            const bufferProp = i.toString();
+            
+            const row = this.rows[i[1]];
+            const col = this.cols[i[0]]
+            const grid = this.findGrid(i);
+            
+            for (let j of [row,col,grid]) {
+                vals.forEach( val => {
+                    // each value is tested for if it is included in the currently being looped over row, col or grid
+                    if(!j.includes(val)){
+                        if(this.solutionsBuffer[bufferProp]) {
+                            if(this.solutionsBuffer[bufferProp].not && !this.solutionsBuffer[bufferProp].not.includes(val) && !this.solutionsBuffer[bufferProp].includes(val)) {
+                                this.solutionsBuffer[bufferProp].push(val);
+                            }
+                        } 
+                        else {
+                            this.solutionsBuffer[bufferProp] = [val];
+                        }
+                    } 
+                    else {
+                        // if $j contains $val then we should remove $val from this.solutionsBuffer[bufferProp]
+                        try {
+                            // this line deletes the $val if it is already included in the solutionsBuffer
+                            delete this.solutionsBuffer[bufferProp][this.solutionsBuffer[bufferProp].indexOf(val)];
+                            
+                            if(!this.solutionsBuffer[bufferProp].not.includes(val)) {
+                                this.solutionsBuffer[bufferProp].not.push(val);
+                            }
+                        } catch(e) {
+                            this.solutionsBuffer[bufferProp] = []; 
+                            // this.solutionsBuffer[bufferProp] must be undefined
+                            // so that this.solutionsBuffer[bufferProp].not can be defined
+                            this.solutionsBuffer[bufferProp].not = [val];
+                        }
+                    }
+                });
+            }
         }
+    }
+    
+    findGrid = (coors) => {
+        let box;
+        this.boxesCoordinates.forEach( (e, index) => {
+            if (e.includes(coors.toString())){
+                box = this.boxes[index];
+            }
+        })
+        return box;
     }
 
     // testingPurposes
