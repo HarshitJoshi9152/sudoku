@@ -50,7 +50,7 @@ class Render
         }
     }
 
-    renderValues = function()
+    renderValues = function(edit)
     {
         // code to display the sudoku
         for (let i = 0; i < this.sudokuMap.length; i++) 
@@ -62,7 +62,7 @@ class Render
                     {
                         x:j, 
                         y:i
-                    });
+                    }, edit);
             }
         }
     }

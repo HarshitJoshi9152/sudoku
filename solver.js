@@ -115,45 +115,110 @@ class Solver
 
     solve = () => {
         const vals = ["1","2","3","4","5","6","7","8","9"];
-        for (let i of this.missingCoordinates){            
-            const bufferProp = i.toString();
-            
-            const row = this.rows[i[1]];
-            const col = this.cols[i[0]]
-            const grid = this.findGrid(i);
-            
-            for (let j of [row,col,grid]) {
-                vals.forEach( val => {
-                    // each value is tested for if it is included in the currently being looped over row, col or grid
-                    if(!j.includes(val)){
-                        if(this.solutionsBuffer[bufferProp]) {
-                            if(this.solutionsBuffer[bufferProp].not && !this.solutionsBuffer[bufferProp].not.includes(val) && !this.solutionsBuffer[bufferProp].includes(val)) {
+        // while(this.missingCoordinates.length) {
+        let counter = 10;
+        // let solved = [];
+        while(counter > 0) {
+            console.log("counter",counter);
+            for (let i in this.missingCoordinates){
+                if (isNaN(i))
+                    break;
+                const coor = this.missingCoordinates[i];
+                const bufferProp = this.missingCoordinates[i].toString();
+                this.missingCoordinates[bufferProp] = i;
+                ///////////////////////////////////////////
+                this.solutionsBuffer[bufferProp] = [];
+                this.solutionsBuffer[bufferProp].not = [];
+
+                const row = this.rows[coor[1]]; // subtract the set of the missing values in this
+                const col = this.cols[coor[0]];
+                const grid = this.findGrid(coor);
+                
+                for (let j of [row,col,grid]) {
+                    vals.forEach( val => {
+                        // each value is tested for if it is included in the currently being looped over row, col or grid
+                        if(!j.includes(val)){
+                            if(!this.solutionsBuffer[bufferProp].not.includes(val) && !this.solutionsBuffer[bufferProp].includes(val))
                                 this.solutionsBuffer[bufferProp].push(val);
-                            }
                         } 
                         else {
-                            this.solutionsBuffer[bufferProp] = [val];
+                            if (this.solutionsBuffer[bufferProp].includes(val))
+                                    this.solutionsBuffer[bufferProp].splice(this.solutionsBuffer[bufferProp].indexOf(val),1);
+                                
+                            if(!this.solutionsBuffer[bufferProp].not.includes(val))
+                                    this.solutionsBuffer[bufferProp].not.push(val);
                         }
-                    } 
-                    else {
-                        // if $j contains $val then we should remove $val from this.solutionsBuffer[bufferProp]
-                        try {
-                            // this line deletes the $val if it is already included in the solutionsBuffer
-                            delete this.solutionsBuffer[bufferProp][this.solutionsBuffer[bufferProp].indexOf(val)];
-                            
-                            if(!this.solutionsBuffer[bufferProp].not.includes(val)) {
-                                this.solutionsBuffer[bufferProp].not.push(val);
-                            }
-                        } catch(e) {
-                            this.solutionsBuffer[bufferProp] = []; 
-                            // this.solutionsBuffer[bufferProp] must be undefined
-                            // so that this.solutionsBuffer[bufferProp].not can be defined
-                            this.solutionsBuffer[bufferProp].not = [val];
-                        }
-                    }
-                });
+                    });
+                }
             }
+            let possibleSolutions = 0;
+            // const solved = [];
+            for (let i in this.solutionsBuffer) {
+                const elm = this.solutionsBuffer[i];
+                if (elm.length == 1) {
+                    // put down the value and remove the coordinate from missing values list and also this.solutionsBuffer;
+                    const indexes = i.split(",");
+                    this.sudoku[indexes[1]][indexes[0]] = elm.filter((item)=>{
+                        return !isNaN(item);
+                    })[0];
+                    // this.renderChange()
+                    // if (counter == 9)
+                    //     debugger;
+                    
+                    // console.log(this.missingCoordinates);
+                    // console.log("lollog",this.missingCoordinates[this.missingCoordinates[i]]);
+                    solved.push(Array.from(this.missingCoordinates[this.missingCoordinates[i]]));
+                    delete this.missingCoordinates[this.missingCoordinates[i]];
+                    delete this.missingCoordinates[i];
+                    delete this.solutionsBuffer[i];
+                }
+                else if (elm.length > 1) {
+                    // do nothing really.........
+                }
+                else {
+                    // elm.length is < 0 ; which means that there is no possible solution
+                    // alert("the sudoku puzzle is Invalid/Broken")
+                    console.error(elm, elm.length, i);
+                    // WTF 24 broken cases in solver.solutionsBuffer;
+                }
+                possibleSolutions += elm.length;
+            }
+            this.SetSudoku(this.sudoku);
+            console.log(possibleSolutions, solved.length, solved);
+            counter--;
         }
+
+
+
+
+
+    // THE REFACTORED VERSION OF THE LOOP
+    // for (let i of this.missingCoordinates){
+    //     const bufferProp = i.toString();
+    //     this.solutionsBuffer[bufferProp] = [];
+    //     this.solutionsBuffer[bufferProp].not = [];
+
+    //     const row = this.rows[i[1]]; // subtract the set of the missing values in this
+    //     const col = this.cols[i[0]];
+    //     const grid = this.findGrid(i);
+        
+    //     for (let j of [row,col,grid]) {
+    //         vals.forEach( val => {
+    //             // each value is tested for if it is included in the currently being looped over row, col or grid
+    //             if(!j.includes(val)){
+    //                 if(!this.solutionsBuffer[bufferProp].not.includes(val) && !this.solutionsBuffer[bufferProp].includes(val))
+    //                     this.solutionsBuffer[bufferProp].push(val);
+    //             } 
+    //             else {
+    //                 if (this.solutionsBuffer[bufferProp].includes(val))
+    //                         this.solutionsBuffer[bufferProp].splice(this.solutionsBuffer[bufferProp].indexOf(val),1);
+                        
+    //                 if(!this.solutionsBuffer[bufferProp].not.includes(val))
+    //                         this.solutionsBuffer[bufferProp].not.push(val);
+    //             }
+    //         });
+    //     }
+    // }
     }
     
     findGrid = (coors) => {

@@ -214,3 +214,129 @@ Currently coding the solver.solve method
             ###SOLVED
     
     LOOP UNTIL THERE IS NO item left in solver.missingCoordinates
+
+2/14/2020 7:38 pm
+
+changing delete this.solutionsBuffer[bufferProp][this.solutionsBuffer[bufferProp].indexOf(val)];
+to splice method so that we can easily confirm if there is only 1 solution left by checking
+the elements length.
+
+// WTF 24 broken cases in solver.solutionsBuffer;
+everything was happening because of the -1 being returned from the indexOf method;
+
+CHECKING TOTAL POSSIBLE SOLUTIONS WITHOUT $theseLines in the !j.includes(val) code
+console.log("possible solutions :", possibleSolutions);
+OUTPUT :: "possible solutions : 101"
+
+$theseLines = // else {
+              //     console.table(bufferProp, j, val);
+              //     this.solutionsBuffer.push(val);
+              // }
+
+TOTAL POSSIBLE SOLUTIONS WITH $theseLines
+OUTPUT :: "possible solutions : 513"
+
+WAAAAIIIITTTTT THIS LINE DUCKED UP !!!!!!!!!!!!!! WE HAVE THE SAME VALUES SAVED MULTIPLE TIMES NOW.
+
+fouund you i watched out for this.solutionsBuffer[bufferProp].not
+but didnt watch out for 
+!this.solutionsBuffer[bufferProp].not.includes(val) && !this.solutionsBuffer[bufferProp].includes(val)
+
+WHY DIDNT I DECLARE this.solutionsBuffer[bufferProp].not AND this.solutionsBuffer[bufferProp] IN THE STARTING OF THE CODE BLOCK
+waitt.... what if i just change the order in which the condition statements are written.
+
+wrote this code 
+<code>
+let _ = false;
+if(this.solutionsBuffer[bufferProp].not && (_=true) && !this.solutionsBuffer[bufferProp].not.includes(val) && !this.solutionsBuffer[bufferProp].includes(val)) {
+    this.solutionsBuffer[bufferProp].push(val);
+    }
+        else if(!this.solutionsBuffer[bufferProp].includes(val) && !_){
+            console.table(bufferProp, j, val);
+            // debugger;
+            this.solutionsBuffer[bufferProp].push(val);
+    }
+} 
+</code>
+still 101
+
+but with this code we have 
+solver.solutionsBuffer["0,2"] >>> ["8", "9", "2", not: Array(6)]
+and without it we have
+solver.solutionsBuffer["0,2"] >>> ["8", "9", "2", not: Array(6)]
+
+this is because it is highly unlikely that the value ("2" in this case will not appear )
+
+refactored the code a little bit. this is how it looks now
+<code>
+    solve = () => {
+        const vals = ["1","2","3","4","5","6","7","8","9"];
+
+        for (let i of this.missingCoordinates){
+            const bufferProp = i.toString();
+            this.solutionsBuffer[bufferProp] = [];
+            this.solutionsBuffer[bufferProp].not = [];
+
+            const row = this.rows[i[1]]; // subtract the set of the missing values in this
+            const col = this.cols[i[0]];
+            const grid = this.findGrid(i);
+            
+            for (let j of [row,col,grid]) {
+                vals.forEach( val => {
+                    // each value is tested for if it is included in the currently being looped over row, col or grid
+                    if(!j.includes(val)){
+                        if(!this.solutionsBuffer[bufferProp].not.includes(val) && !this.solutionsBuffer[bufferProp].includes(val))
+                            this.solutionsBuffer[bufferProp].push(val);
+                    } 
+                    else {
+                        if (this.solutionsBuffer[bufferProp].includes(val))
+                                this.solutionsBuffer[bufferProp].splice(this.solutionsBuffer[bufferProp].indexOf(val),1);
+                            
+                        if(!this.solutionsBuffer[bufferProp].not.includes(val))
+                                this.solutionsBuffer[bufferProp].not.push(val);
+                    }
+                });
+            }
+        }
+
+        let possibleSolutions = 0;
+        const sol = [];
+        for (let i in this.solutionsBuffer) {
+            const elm = this.solutionsBuffer[i];
+            if (elm.length == 1) {
+                // put down the value and remove the coordinate from missing values list and also this.solutionsBuffer;
+                sol.push("lol");
+            }
+            else if (elm.length > 1) {
+                // do nothing really.........
+            }
+            else {
+                // elm.length is < 0 ; which means that there is no possible solution
+                // alert("the sudoku puzzle is Invalid/Broken")
+                console.error(elm, elm.length, i);
+                // WTF 24 broken cases in solver.solutionsBuffer;
+            }
+            possibleSolutions += elm.length;
+        }
+        console.log(possibleSolutions);
+    }
+</code>
+
+can i replace the .includes with in keyword ?
+
+
+1:11 am
+we removed the values from this.missingCoordinates but did not remove them from this.solutionBuffer;
+but still solved.length goes from 14 to 17 and then gets stuck on 19;
+
+to check further we have to render the solutions on screen
+RENDERED !!! render.renderValues(true);
+maybe if we re analyse or reset the sudoku with solver.setSudoku
+
+we didnt have to specially setup a way to identify and remove the missing coordinates that were filled
+we could have just use solver.analyse
+
+solver.setSudoku WORKED !!!!!!!!!!!!!!!!!!!!!!!!!
+
+THE SUDOKU GOT SOLVED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+1:33 am

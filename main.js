@@ -25,7 +25,7 @@ function generate_sudoku(gaps_seed)
 }
 
 let sudoku = generate_sudoku();
-
+const solved = [];
 let canvas = document.querySelector("#canvas");
 let ctx = canvas.getContext("2d");
 let width = canvas.width;
