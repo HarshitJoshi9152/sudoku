@@ -1,0 +1,23 @@
+{
+  "name": "sudoku",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarshitJoshi9152/sudoku.git"
+  },
+  "keywords": [],
+  "author": "Harshit Joshi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HarshitJoshi9152/sudoku/issues"
+  },
+  "homepage": "https://github.com/HarshitJoshi9152/sudoku#readme",
+  "devDependencies": {
+    "serve": "^11.3.0"
+  }
+}

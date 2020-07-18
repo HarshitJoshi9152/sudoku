@@ -1,0 +1,48 @@
+steps
+
+
+1. loop over missing Coordinates
+
+	substep 1:
+	store missingCoordinates' value in this.missingCoordinates with the coordinates 
+	as the identifier (as in a hash array)
+	by
+	coordinate = this.missingCoordinate[i];
+	this.missingCoordinates[coordinate.toString()] = i;
+	
+	// todo write about the use of this practice.
+
+	substep 2:
+	find this coordinate's row, col, and grid.
+
+	substep 3:
+	make a buffer for possible solutions (solutionsBuffer and solutionsBuffer.not) to store
+	eligible solutions and the inapplicable options respectively.
+	(solutionsBuffer is indexed by the coordinate.toString() values)
+
+	substep 4:
+	loop over the array of row, col and grid. [row, col, grid]
+	to find possible solutions and incorrect|inapplicable solutions and store them in
+	solutionsBuffer and solutionsBuffer.not respectively.
+
+2. loop over the solutionsBuffer and find the correct solutions.
+
+	substep 1:
+	check if the length of the current solution array is 1.
+	(only 1 eligible solution in there)
+	
+	if so then
+		get x,y [coordinate|pos] values from the i variable (iterator in for..in loop)
+		using i.split(',') and store them;
+		
+		set the value of this.sudoku[ypos, xpos] = this.solutionsBuffer[i][0] // only value
+
+		add the solved coordinate to the list of solved coordinates.
+
+		delete the coordinate from missingCoordinates (both references reverse and direct)
+		and also from solutionsBuffer
+	
+	decrement the counter variable.
+
+note: in the current implementation we use a while loop to brute force the sudoku
+	  and run all the steps 40 times. 

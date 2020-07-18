@@ -222,14 +222,15 @@ class Solver {
 	};
 
 	// @findGrid (coors) [x-pos, y-pos]
+	// return the grid (one of the 9 small grids) in which the given coordinates lie.
 	findGrid = (coors) => {
-		// let box;
+		let box;
 		this.boxesCoordinates.forEach((e, index) => {
 			if (e.includes(coors.toString())) {
-				return this.boxes[index];
+				box = this.boxes[index];
 			}
 		});
-		// return box;
+		return box;
 	};
 
 	// testingPurposes

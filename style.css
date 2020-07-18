@@ -1,0 +1,23 @@
+.container {
+	/* float: left; */
+	/* background-color: blue; */
+}
+.controls > button {
+	/* color: "red"; */
+	padding: 5px;
+	border: 2px solid #444;
+	background-color: #eee;
+	border-radius: 10%;
+	/* font-family: ; */
+}
+
+#canvas {
+	/* display: inline-block; */
+	float: right;
+}
+
+a {
+	display : none;
+}
+
+/* @width  */

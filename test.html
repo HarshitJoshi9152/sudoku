@@ -1,0 +1,65 @@
+<html>
+<body>
+<video autoplay></video>
+
+<script>
+	function log(info){
+		if (!typeof info in ["string", "number"]) {
+			log("something else")
+		}
+		let p = document.createElement("p");
+		// switch case for different data types
+		p.appendChild(
+			document.createTextNode(`${info}`)
+		)
+		document.querySelector("#console").appendChild(p);
+	}
+
+	try{
+		const constraints = {
+		video: true
+		};
+
+		const video = document.querySelector('video');
+
+		navigator.mediaDevices.getUserMedia(constraints).
+		then((stream) => {video.srcObject = stream});
+	}
+	catch (e) {
+		log(e);
+	}
+
+	/*function log(info){
+    if (!typeof info in ["string", "number"]) {
+        log("something else")
+    }
+    let p = document.createElement("p");
+    // switch case for different data types
+    p.appendChild(
+        document.createTextNode(`${info}`)
+    )
+    document.querySelector("#console").appendChild(p);
+}
+
+// checking for user media access;
+
+function hasGetUserMedia() {
+    return !!(navigator.mediaDevices &&
+      navigator.mediaDevices.getUserMedia);
+  }
+  
+  if (hasGetUserMedia()) {
+    // Good to go!
+    log("Good to go!")
+  } else {
+    alert('getUserMedia() is not supported by your browser');
+  }
+
+// log(navigator.mediaDevices.ondevicechange);
+*/
+
+
+
+</script>
+</body>
+</html>
