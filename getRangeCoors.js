@@ -1,5 +1,7 @@
 function getRangeCoors(s, e, dbg=false){
-    // s and e are arrays with std location formats in which [0] represents the x pos and [1] represents the y pos
+	`this function returns array of coordinates of all positions between s and e in the format [x-pos, y-pos]`
+    // s and e are arrays with std location formats with len 2 in which [0] represents the x pos and [1] represents the y pos.
+	// s represent starting and e represent ending coordinates.
     const startValue = s[0] * s[1];
     // const endValue =   e[0] * e[1];
     const noOfCorsRequired = (e[0] + 1 - s[0]) * (e[1] + 1 - s[1])
